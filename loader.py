@@ -1,4 +1,5 @@
 import pypdf
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from config import EMBEDDING_MODEL_NAME
 from langchain_chroma import Chroma
@@ -25,8 +26,8 @@ def load_data(file_path: str) -> list[Document]:
         )
         for i, page in enumerate(reader.pages)
     ]
-
-
 file_path = "./sample_data/testpdf.pdf"
 docs = load_data(file_path)
-print(len(docs))
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200, add_start_index=True)
+splits = text_splitter.split_documents(docs)
+index = store.add_documents(documents=splits)
