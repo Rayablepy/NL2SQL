@@ -16,5 +16,5 @@ agent = create_agent(
     tools=tools
 )
 def getresponse(user:str) -> str:
-    response = agent.invoke(user)
-    return response.content
+    response = agent.invoke({"messages": [{"role": "user", "content": user}]})
+    return response["messages"][-1].content_blocks[0]['text']
