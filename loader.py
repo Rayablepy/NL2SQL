@@ -1,6 +1,7 @@
 import pypdf
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
+from langchain.tools import tool
 from config import EMBEDDING_MODEL_NAME
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
@@ -31,3 +32,16 @@ docs = load_data(file_path)
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200, add_start_index=True)
 splits = text_splitter.split_documents(docs)
 index = store.add_documents(documents=splits)
+
+@tool
+def query_data(query: str) -> str:
+    """Query a local RAG database for information matching the query
+
+    Args:
+        query (str): The query string to search for in the database
+
+    Returns:
+        str: The matching results from the database
+    """
+    results = store.similarity_search(query)
+    return "Results:\n" + "\n".join([doc.page_content for doc in results])
