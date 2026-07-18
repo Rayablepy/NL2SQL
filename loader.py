@@ -34,7 +34,7 @@ splits = text_splitter.split_documents(docs)
 index = store.add_documents(documents=splits)
 
 @tool
-def query_data(query: str) -> str:
+async def query_data(query: str) -> str:
     """Query a local RAG database for information matching the query
 
     Args:
@@ -43,5 +43,5 @@ def query_data(query: str) -> str:
     Returns:
         str: The matching results from the database
     """
-    results = store.similarity_search(query)
+    results = await store.asimilarity_search(query)
     return "Results:\n" + "\n".join([doc.page_content for doc in results])
