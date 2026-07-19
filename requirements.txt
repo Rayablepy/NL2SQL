@@ -4,3 +4,5 @@ langchain-chroma
 langchain-text-splitters
 dotenv
 pypdf
+streamlit
+textract
