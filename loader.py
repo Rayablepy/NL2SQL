@@ -1,8 +1,9 @@
+
 import textract
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain.tools import tool
-from config import EMBEDDING_MODEL_NAME
+from config import ACTUAL_FILE_PATH, EMBEDDING_MODEL_NAME
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 embeddings = OpenAIEmbeddings(
@@ -27,18 +28,14 @@ def read_data(file_path: str) -> list[Document]:
         )
     ]
 
-file_path="./sample_data/"
+file_path=ACTUAL_FILE_PATH
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100, add_start_index=True)
 
 def save_data(file_name: str):
     docs=read_data(file_path+file_name)
-    print(len(docs))
     splits = text_splitter.split_documents(docs)
-    print(len(splits))
     store.add_documents(documents=splits)
 
-save_data("IT2212_AssignmentReport_250506U.docx")
-'''
 @tool
 async def query_data(query: str) -> str:
     """Query a local RAG database for information matching the query
@@ -51,4 +48,3 @@ async def query_data(query: str) -> str:
     """
     results = await store.asimilarity_search(query)
     return "Results:\n" + "\n".join([doc.page_content for doc in results])
-'''

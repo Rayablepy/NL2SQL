@@ -1,11 +1,12 @@
 import asyncio
 import os
+from config import ACTUAL_FILE_PATH
 import streamlit as st
 from loader import save_data
 from main import getresponse
 
-SAMPLE_DIR = "sample_data"
-os.makedirs(SAMPLE_DIR, exist_ok=True)
+DIR = ACTUAL_FILE_PATH
+os.makedirs(DIR, exist_ok=True)
 
 with st.sidebar:
     st.header("Upload Data")
@@ -16,11 +17,11 @@ with st.sidebar:
     )
     if uploaded_files:
         for f in uploaded_files:
-            dest = os.path.join(SAMPLE_DIR, f.name)
-            save_data(f.name)
+            dest = os.path.join(DIR, f.name)
             with open(dest, "wb") as out:
                 out.write(f.getbuffer())
-        st.success(f"Saved {len(uploaded_files)} file(s) to {SAMPLE_DIR}")
+                save_data(f.name)
+        st.success(f"Saved {len(uploaded_files)} file(s) to {DIR}")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
