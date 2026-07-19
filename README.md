@@ -1,7 +1,8 @@
 # NL2SQL
 An AI powered, simple RAG pipeline that runs completely within your local system. It uses a streamlit based frontend that supports file uploads of basically any file type, as well as a basic user to agent chat flow. 
 
-#How it works
+
+
 Uploaded files are passed into an embbedding model of your choice that can be configured in a .env file, and stored in a local chromaDB database that the agent can perform similarity searches on to search for data when needed.
 
 Due to said capability being saved as a tool, the local model only queries it when necessary, reducing performance overhead. The local model can be configured to use different models in your .env file.
