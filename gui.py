@@ -1,3 +1,4 @@
+import asyncio
 import os
 import streamlit as st
 from main import getresponse
@@ -29,6 +30,7 @@ if prompt := st.chat_input("Your input here..."):
     with st.chat_message("user"):
         st.markdown(prompt)
     with st.chat_message("assistant"):
-        stream = getresponse(prompt)
-        response = st.write_stream(stream)
+        with st.spinner("Thinking..."):
+            response = asyncio.run(getresponse(prompt))
+        st.markdown(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
