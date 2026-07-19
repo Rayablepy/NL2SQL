@@ -1,4 +1,4 @@
-import pypdf
+import textract
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 from langchain.tools import tool
@@ -18,21 +18,27 @@ store = Chroma(
     persist_directory="./chroma_NL2SQL",
 )
 
-def load_data(file_path: str) -> list[Document]:
-    reader = pypdf.PdfReader(file_path)
+def read_data(file_path: str) -> list[Document]:
+    text = textract.process(file_path).decode("utf-8")
     return [
         Document(
-            page_content=page.extract_text() or "",
-            metadata={"source": file_path, "page": i},
+            page_content=text,
+            metadata={"source": file_path},
         )
-        for i, page in enumerate(reader.pages)
     ]
-file_path = "./sample_data/testpdf.pdf"
-docs = load_data(file_path)
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200, add_start_index=True)
-splits = text_splitter.split_documents(docs)
-index = store.add_documents(documents=splits)
 
+file_path="./sample_data/"
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100, add_start_index=True)
+
+def save_data(file_name: str):
+    docs=read_data(file_path+file_name)
+    print(len(docs))
+    splits = text_splitter.split_documents(docs)
+    print(len(splits))
+    store.add_documents(documents=splits)
+
+save_data("IT2212_AssignmentReport_250506U.docx")
+'''
 @tool
 async def query_data(query: str) -> str:
     """Query a local RAG database for information matching the query
@@ -45,3 +51,4 @@ async def query_data(query: str) -> str:
     """
     results = await store.asimilarity_search(query)
     return "Results:\n" + "\n".join([doc.page_content for doc in results])
+'''

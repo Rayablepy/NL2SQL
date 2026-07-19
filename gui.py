@@ -1,6 +1,7 @@
 import asyncio
 import os
 import streamlit as st
+from loader import save_data
 from main import getresponse
 
 SAMPLE_DIR = "sample_data"
@@ -16,6 +17,7 @@ with st.sidebar:
     if uploaded_files:
         for f in uploaded_files:
             dest = os.path.join(SAMPLE_DIR, f.name)
+            save_data(f.name)
             with open(dest, "wb") as out:
                 out.write(f.getbuffer())
         st.success(f"Saved {len(uploaded_files)} file(s) to {SAMPLE_DIR}")
