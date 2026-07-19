@@ -1,4 +1,4 @@
-# NL2SQL
+# NL2RAG
 An AI powered, simple RAG pipeline that runs completely within your local system. It uses a streamlit based frontend that supports file uploads of basically any file type, as well as a basic user to agent chat flow. 
 
 
