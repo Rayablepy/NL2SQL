@@ -50,7 +50,6 @@ async def query_data(query: str, k: int = 4) -> str:
     results = await store.asimilarity_search(query, k=k)
     return "Results:\n" + "\n".join([doc.page_content for doc in results])
 
-@tool
 async def remove_data(file_path: str) -> str:
     """Remove all document chunks from the RAG database that were ingested from a specific file
 
