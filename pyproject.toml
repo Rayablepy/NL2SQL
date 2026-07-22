@@ -1,5 +1,5 @@
 [project]
-name = "nl2sql"
+name = "nl2rag"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
