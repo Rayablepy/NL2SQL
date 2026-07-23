@@ -1,9 +1,10 @@
 
 import textract
+from langchain_text_splitters import TokenTextSplitter
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
-from langchain.tools import tool
-from config import ACTUAL_FILE_PATH, EMBEDDING_MODEL_NAME
+from langchain_core.tools import tool
+from config import ACTUAL_FILE_PATH, EMBEDDING_MODEL_NAME, EMBEDDING_MODEL_CONTEXT, EMBEDDING_MODEL_CHUNK
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 embeddings = OpenAIEmbeddings(
@@ -29,12 +30,12 @@ def read_data(file_path: str) -> list[Document]:
     ]
 
 file_path=ACTUAL_FILE_PATH
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100, add_start_index=True)
+text_splitter = TokenTextSplitter(encoding_name=EMBEDDING_MODEL_NAME,chunk_size=EMBEDDING_MODEL_CONTEXT,chunk_overlap=EMBEDDING_MODEL_CHUNK)
 
 def save_data(file_name: str):
     docs=read_data(file_path+file_name)
     splits = text_splitter.split_documents(docs)
-    store.add_documents(documents=splits)
+    store.add_documents(documents=splits,batch_size=50)
 
 @tool
 async def query_data(query: str) -> str:
